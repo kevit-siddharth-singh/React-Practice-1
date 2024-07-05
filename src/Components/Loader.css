@@ -2,11 +2,19 @@
   position: absolute;
   /* background-color: transparent; */
   display: grid;
-  place-items: center;
-  bottom: 50%;
+
+  top: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+
+
   backdrop-filter: blur(9px);
+
 }
 
+
+
+  
 .loader {
   background-color: transparent;
   width: 6rem;

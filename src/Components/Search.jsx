@@ -2,6 +2,7 @@ import React from "react";
 
 function Search({children,search}) {
   return (
+    
     <div class="container">
       <p className="heading">React Practice 1</p>
       <input

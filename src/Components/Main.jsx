@@ -1,64 +1,75 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import Loader from "./Loader";
-import "./Main.css";
-import Search from "./Search";
-import "./Search.css";
+// src/Main.js
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import Loader from './Loader';
+import Search from './Search';
+import './Main.css';
+import './Search.css';
 
 function Main() {
   const [Apidata, setApidata] = useState(null);
-  const [search, setsearch] = useState("");
-
-  console.log({ Apidata });
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   function searchMethod(data) {
-    console.log(data);
-    setsearch(data);
+    setSearchLoading(true);
+    setTimeout(() => {
+      setSearch(data);
+      setSearchLoading(false);
+    }, 500); // Simulate a delay for the search loader
   }
+
   useEffect(() => {
     axios
-      .get("https://jsonplaceholder.typicode.com/users", {})
+      .get('https://jsonplaceholder.typicode.com/users', {})
       .then((response) => {
         setTimeout(() => {
           setApidata(response.data);
-        }, "800");
+          setLoading(false);
+        }, 800);
       })
       .catch((error) => {
         console.error(error);
+        setLoading(false);
       });
   }, []);
 
   return (
     <div className="main-container">
-      {Apidata ? (
+      {loading ? (
+        <Loader />
+      ) : (
         <div className="data">
           <Search search={searchMethod} />
-          <table className="table">
-            <thead className="table-header">
-              <tr className="table-rows">
-                <th>Name</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Phone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Apidata.filter((item) =>
-                item.name.toLowerCase().includes(search)
-              ).map((item) => (
-                <tr className="table-rows" key={item.id}>
-                  <td>{item.name}</td>
-                  <td>{item.username}</td>
-                  <td>{item.email}</td>
-                  <td>{item.phone}</td>
+          {searchLoading ? (
+            <Loader />
+          ) : (
+            <table className="table">
+              <thead className="table-header">
+                <tr className="table-rows">
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Phone</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div>
-          <Loader />
+              </thead>
+              <tbody>
+                {Apidata.filter((item) => {
+                  return search.toLowerCase() === ''
+                    ? item
+                    : item.name.toLowerCase().includes(search.toLowerCase());
+                }).map((item) => (
+                  <tr className="table-rows" key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{item.username}</td>
+                    <td>{item.email}</td>
+                    <td>{item.phone}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
     </div>

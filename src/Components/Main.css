@@ -8,6 +8,11 @@
   width: 100%;
   position: relative;
 }
+.data{
+  
+  position: relative;
+}
+
 .table {
   margin-top: 1rem;
   border-collapse: collapse;
